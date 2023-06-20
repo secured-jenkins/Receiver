@@ -16,6 +16,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
@@ -29,6 +30,9 @@ public class RabbitConfig implements RabbitListenerConfigurer {
 
 	@Autowired
 	private CarService carService;
+	
+	@Value("${spring.rabbitmq.host}")
+	private String rabbitHost;
 
 	@Bean(name = "firstQueue")
 	Queue queue() {
@@ -48,7 +52,7 @@ public class RabbitConfig implements RabbitListenerConfigurer {
 
 	@Bean
 	ConnectionFactory connectionFactory() {
-		CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("localhost");
+		CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(rabbitHost);
 		cachingConnectionFactory.setUsername("guest");
 		cachingConnectionFactory.setUsername("guest");
 		return cachingConnectionFactory;
