@@ -6,6 +6,8 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 
 import com.example.DTO.CarDTO;
 import com.example.DTO.EmployeeDTO;
+import com.example.persistence.entities.Car;
+import com.example.services.CarService;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -13,6 +15,7 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 import java.util.List;
@@ -23,6 +26,9 @@ import org.springframework.amqp.core.Queue;
 public class RabbitConfig implements RabbitListenerConfigurer {
 	final static String queueName = "spring-boot";
 	final static String queueName2 = "summer-boot";
+
+	@Autowired
+	private CarService carService;
 
 	@Bean(name = "firstQueue")
 	Queue queue() {
@@ -83,6 +89,9 @@ public class RabbitConfig implements RabbitListenerConfigurer {
 
 	@RabbitListener(queues = "spring-boot")
 	public void receiveCars(CarDTO x) {
+		// just as example that this app receives data and consumes it in its distinct
+		// database
+		carService.addCar(new Car(x.getModel()));
 		System.out.println("Received on spring queue: model: " + x.getModel() + ", Id:" + x.getId());
 	}
 
