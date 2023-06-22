@@ -66,5 +66,22 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<activatedProperties>default</activatedProperties>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<activatedProperties>test</activatedProperties>
+			</properties>
+		</profile>
+	</profiles>
 
 </project>
